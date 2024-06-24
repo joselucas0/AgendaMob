@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layoutCalendario"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/cinza">
 
 
     <View
@@ -41,6 +42,7 @@
             android:layout_marginTop="11dp"
             android:layout_marginEnd="29dp"
             android:layout_marginBottom="9dp"
+            android:background="@color/branco"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -73,7 +75,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:layout_weight="1"
-            android:background="@color/azulClaro"
+            android:backgroundTint="@color/azulClaro"
             android:text="Sair" />
 
         <Button
@@ -82,7 +84,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:layout_weight="1"
-            android:background="@color/azulClaro"
+            android:backgroundTint="@color/azulClaro"
             android:text="Adicionar evento" />
     </LinearLayout>
 
@@ -121,13 +123,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
-                        android:text="Feito" />
+                        android:text="Feito"
+                        android:backgroundTint="@color/azulClaro" />
 
                     <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
-                        android:text="Excluir" />
+                        android:text="Excluir"
+                        android:backgroundTint="@color/azulClaro" />
 
 
                 </LinearLayout>
