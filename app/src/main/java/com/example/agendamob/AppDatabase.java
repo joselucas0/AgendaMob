@@ -8,11 +8,12 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import com.example.agendamob.UserDao;
 
-@Database(entities = {User.class}, version = 1, exportSchema = false)
+@Database(entities = {User.class, Event.class}, version = 2, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase instance;
 
     public abstract UserDao userDao();
+    public abstract EventDao eventDao();
 
     public static synchronized AppDatabase getInstance(Context context) {
         if (instance == null) {
