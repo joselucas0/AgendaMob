@@ -29,7 +29,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
@@ -37,4 +36,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    implementation("androidx.room:room-common:2.4.2")
+    implementation("androidx.room:room-runtime:2.4.2")
+    annotationProcessor("androidx.room:room-compiler:2.4.2")
 }
