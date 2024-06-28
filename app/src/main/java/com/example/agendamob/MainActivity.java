@@ -1,5 +1,6 @@
 package com.example.agendamob;
 
+
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,10 +21,12 @@ public class MainActivity extends AppCompatActivity {
     private AppDatabase db;
     private User loggedInUser;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         calendarView = findViewById(R.id.calendarView4);
         layoutEventos = findViewById(R.id.layoutEventos);
@@ -154,5 +157,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 }
+
+
 
 
