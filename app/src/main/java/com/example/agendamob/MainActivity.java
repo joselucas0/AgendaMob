@@ -1,6 +1,5 @@
 package com.example.agendamob;
 
-
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,21 +11,21 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
-
     private CalendarView calendarView;
     private LinearLayout layoutEventos;
     private AppDatabase db;
     private User loggedInUser;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         calendarView = findViewById(R.id.calendarView4);
         layoutEventos = findViewById(R.id.layoutEventos);
@@ -36,7 +35,9 @@ public class MainActivity extends AppCompatActivity {
         db = AppDatabase.getInstance(this);
 
         btnAdicionarEvento.setOnClickListener(v -> {
-            Toast.makeText(MainActivity.this, "Criação de evento ainda não implementada", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(MainActivity.this, CreateEventActivity.class);
+            intent.putExtra("LOGGED_IN_USER", loggedInUser);
+            startActivity(intent);
         });
 
         btnVoltar.setOnClickListener(v -> {
@@ -47,24 +48,21 @@ public class MainActivity extends AppCompatActivity {
         });
 
         calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
-            String selectedDate = dayOfMonth + "/" + (month + 1) + "/" + year;
+            String selectedDate = String.format(Locale.getDefault(), "%02d/%02d/%d", dayOfMonth, (month + 1), year);
             loadEvents(selectedDate);
         });
 
-        // Recebe o usuário logado ao iniciar a atividade
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("LOGGED_IN_USER")) {
             loggedInUser = (User) intent.getSerializableExtra("LOGGED_IN_USER");
         }
 
-        // Verifica se o usuário está logado antes de carregar os eventos
         if (loggedInUser != null) {
             long currentTime = System.currentTimeMillis();
             calendarView.setDate(currentTime, false, true);
             loadEvents(getFormattedDate(currentTime));
         } else {
             Toast.makeText(this, "Erro: Usuário não está logado", Toast.LENGTH_SHORT).show();
-            // Redireciona para a tela de login
             Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(loginIntent);
             finish();
@@ -85,8 +83,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private String getFormattedDate(long date) {
-        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("d/M/yyyy");
-        return sdf.format(new java.util.Date(date));
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        return sdf.format(new Date(date));
     }
 
     private class LoadEventsTask extends AsyncTask<String, Void, List<Event>> {
@@ -99,27 +97,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(List<Event> events) {
             for (Event event : events) {
-                LinearLayout eventLayout = new LinearLayout(MainActivity.this);
-                eventLayout.setOrientation(LinearLayout.HORIZONTAL);
-                eventLayout.setPadding(8, 8, 8, 8);
-
-                TextView eventNameView = new TextView(MainActivity.this);
-                eventNameView.setText(event.getName());
-                eventNameView.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
-
-                Button btnFeito = new Button(MainActivity.this);
-                btnFeito.setText("Feito");
-                btnFeito.setOnClickListener(v -> markEventAsDone(event.getId()));
-
-                Button btnExcluir = new Button(MainActivity.this);
-                btnExcluir.setText("Excluir");
-                btnExcluir.setOnClickListener(v -> deleteEvent(event.getId()));
-
-                eventLayout.addView(eventNameView);
-                eventLayout.addView(btnFeito);
-                eventLayout.addView(btnExcluir);
-
-                layoutEventos.addView(eventLayout);
+                displayEvent(event);
             }
         }
     }
@@ -128,15 +106,12 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Integer... integers) {
             int eventId = integers[0];
-            Event event = db.eventDao().getEventById(eventId);
-            event.setDone(true);
-            db.eventDao().update(event);
+            db.eventDao().updateEventStatus(eventId, true);
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            Toast.makeText(MainActivity.this, "Evento concluído!", Toast.LENGTH_SHORT).show();
             loadEvents(getFormattedDate(calendarView.getDate()));
         }
     }
@@ -145,19 +120,37 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Integer... integers) {
             int eventId = integers[0];
-            Event event = db.eventDao().getEventById(eventId);
-            db.eventDao().delete(event);
+            db.eventDao().deleteEventById(eventId);
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            Toast.makeText(MainActivity.this, "Evento excluído!", Toast.LENGTH_SHORT).show();
             loadEvents(getFormattedDate(calendarView.getDate()));
         }
     }
+
+    private void displayEvent(Event event) {
+        LinearLayout eventLayout = new LinearLayout(MainActivity.this);
+        eventLayout.setOrientation(LinearLayout.HORIZONTAL);
+        eventLayout.setPadding(8, 8, 8, 8);
+
+        TextView eventNameView = new TextView(MainActivity.this);
+        eventNameView.setText(event.getName());
+        eventNameView.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+
+        Button btnFeito = new Button(MainActivity.this);
+        btnFeito.setText("Feito");
+        btnFeito.setOnClickListener(v -> markEventAsDone(event.getId()));
+
+        Button btnExcluir = new Button(MainActivity.this);
+        btnExcluir.setText("Excluir");
+        btnExcluir.setOnClickListener(v -> deleteEvent(event.getId()));
+
+        eventLayout.addView(eventNameView);
+        eventLayout.addView(btnFeito);
+        eventLayout.addView(btnExcluir);
+
+        layoutEventos.addView(eventLayout);
+    }
 }
-
-
-
-

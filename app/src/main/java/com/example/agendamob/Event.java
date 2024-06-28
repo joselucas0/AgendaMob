@@ -21,8 +21,7 @@ public class Event {
     @ColumnInfo(name = "done")
     private boolean done;
 
-    public Event(int id, String name, String date, int userId, boolean done) {
-        this.id = id;
+    public Event(String name, String date, int userId, boolean done) {
         this.name = name;
         this.date = date;
         this.userId = userId;
@@ -69,5 +68,3 @@ public class Event {
         this.done = done;
     }
 }
-
-

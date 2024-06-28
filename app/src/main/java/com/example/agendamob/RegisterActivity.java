@@ -32,11 +32,10 @@ public class RegisterActivity extends AppCompatActivity {
         String password = etPassword.getText().toString().trim();
 
         if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "Please fill in all fields!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Por favor, preencha todos os campos!", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Verifica se o email já está cadastrado em uma thread separada
         new CheckUserTask().execute(email);
     }
 
@@ -50,9 +49,8 @@ public class RegisterActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(User existingUser) {
             if (existingUser != null) {
-                Toast.makeText(RegisterActivity.this, "Email already registered!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RegisterActivity.this, "Email já registrado!", Toast.LENGTH_SHORT).show();
             } else {
-                // Cria um novo usuário em uma thread separada
                 new InsertUserTask().execute();
             }
         }
@@ -74,9 +72,8 @@ public class RegisterActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            Toast.makeText(RegisterActivity.this, "User registered successfully!", Toast.LENGTH_SHORT).show();
-            // Volta para a tela de login após o cadastro
-            finish(); // Finaliza a atividade de registro
+            Toast.makeText(RegisterActivity.this, "Usuário registrado com sucesso!", Toast.LENGTH_SHORT).show();
+            finish();
         }
     }
 }

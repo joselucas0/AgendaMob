@@ -24,4 +24,14 @@ public interface EventDao {
 
     @Query("SELECT * FROM events WHERE date = :date AND userId = :userId")
     List<Event> getEventsByDateAndUserId(String date, int userId);
+
+    @Query("UPDATE events SET done = :done WHERE id = :eventId")
+    void updateEventStatus(int eventId, boolean done);
+
+    @Query("DELETE FROM events WHERE id = :eventId")
+    void deleteEventById(int eventId);
+
+    @Query("SELECT * FROM events")
+    List<Event> getAllEvents(); // Adiciona este método para buscar todos os eventos
+
 }
