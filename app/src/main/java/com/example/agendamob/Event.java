@@ -4,28 +4,33 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
+
 @Entity(tableName = "events")
-public class Event {
+public class Event implements Serializable {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
     @ColumnInfo(name = "name")
     private String name;
 
-    @ColumnInfo(name = "date")
-    private String date;
+    @ColumnInfo(name = "dateTime")
+    private String dateTime;
 
     @ColumnInfo(name = "userId")
     private int userId;
 
-    @ColumnInfo(name = "done")
-    private boolean done;
+    @ColumnInfo(name = "completed")
+    private boolean completed;
 
-    public Event(String name, String date, int userId, boolean done) {
+    @ColumnInfo(name = "alarmSound")
+    private String alarmSound; // Novo campo para armazenar o som de alarme selecionado
+
+    public Event(String name, String dateTime, int userId, boolean completed) {
         this.name = name;
-        this.date = date;
+        this.dateTime = dateTime;
         this.userId = userId;
-        this.done = done;
+        this.completed = completed;
     }
 
     public int getId() {
@@ -44,12 +49,12 @@ public class Event {
         this.name = name;
     }
 
-    public String getDate() {
-        return date;
+    public String getDateTime() {
+        return dateTime;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
     }
 
     public int getUserId() {
@@ -60,11 +65,19 @@ public class Event {
         this.userId = userId;
     }
 
-    public boolean isDone() {
-        return done;
+    public boolean isCompleted() {
+        return completed;
     }
 
-    public void setDone(boolean done) {
-        this.done = done;
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
+    }
+
+    public String getAlarmSound() {
+        return alarmSound;
+    }
+
+    public void setAlarmSound(String alarmSound) {
+        this.alarmSound = alarmSound;
     }
 }

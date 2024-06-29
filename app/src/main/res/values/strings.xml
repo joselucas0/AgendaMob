@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">AgendaMob</string>
+    <string name="select_alarm_sound_prompt">Escolher Som do Alarme</string>
+
 </resources>

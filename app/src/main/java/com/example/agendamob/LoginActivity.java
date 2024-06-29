@@ -50,18 +50,22 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected User doInBackground(String... strings) {
             String email = strings[0];
-            String password = strings[1];
-            return db.userDao().login(email, password);
+            return db.userDao().findByEmail(email);
         }
 
         @Override
         protected void onPostExecute(User user) {
             if (user != null) {
-                Toast.makeText(LoginActivity.this, "Login bem-sucedido!", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                intent.putExtra("LOGGED_IN_USER", user);
-                startActivity(intent);
-                finish();
+                String inputPassword = etPassword.getText().toString().trim();
+                if (PasswordUtils.checkPassword(inputPassword, user.getHashedPassword())) {
+                    Toast.makeText(LoginActivity.this, "Login bem-sucedido!", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    intent.putExtra("LOGGED_IN_USER", user);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Toast.makeText(LoginActivity.this, "Credenciais inválidas", Toast.LENGTH_SHORT).show();
+                }
             } else {
                 Toast.makeText(LoginActivity.this, "Credenciais inválidas", Toast.LENGTH_SHORT).show();
             }

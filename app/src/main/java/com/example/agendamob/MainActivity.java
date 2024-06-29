@@ -3,6 +3,7 @@ package com.example.agendamob;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.LinearLayout;
@@ -29,10 +30,11 @@ public class MainActivity extends AppCompatActivity {
 
         calendarView = findViewById(R.id.calendarView4);
         layoutEventos = findViewById(R.id.layoutEventos);
-        Button btnAdicionarEvento = findViewById(R.id.buttonAdicionarE);
-        Button btnVoltar = findViewById(R.id.buttonVoltar);
 
         db = AppDatabase.getInstance(this);
+
+        Button btnAdicionarEvento = findViewById(R.id.buttonAdicionarE);
+        Button btnVoltar = findViewById(R.id.buttonVoltar);
 
         btnAdicionarEvento.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, CreateEventActivity.class);
@@ -102,6 +104,28 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void displayEvent(Event event) {
+        View eventView = getLayoutInflater().inflate(R.layout.item_event, null);
+
+        TextView eventNameView = eventView.findViewById(R.id.event_name);
+        Button btnFeito = eventView.findViewById(R.id.button_done);
+        Button btnExcluir = eventView.findViewById(R.id.button_delete);
+
+        eventNameView.setText(event.getName());
+
+        btnFeito.setOnClickListener(v -> markEventAsDone(event.getId()));
+
+        btnExcluir.setOnClickListener(v -> deleteEvent(event.getId()));
+
+        eventView.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, EventDetailsActivity.class);
+            intent.putExtra("EVENT_ID", event.getId());
+            startActivity(intent);
+        });
+
+        layoutEventos.addView(eventView);
+    }
+
     private class MarkEventAsDoneTask extends AsyncTask<Integer, Void, Void> {
         @Override
         protected Void doInBackground(Integer... integers) {
@@ -128,29 +152,5 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             loadEvents(getFormattedDate(calendarView.getDate()));
         }
-    }
-
-    private void displayEvent(Event event) {
-        LinearLayout eventLayout = new LinearLayout(MainActivity.this);
-        eventLayout.setOrientation(LinearLayout.HORIZONTAL);
-        eventLayout.setPadding(8, 8, 8, 8);
-
-        TextView eventNameView = new TextView(MainActivity.this);
-        eventNameView.setText(event.getName());
-        eventNameView.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
-
-        Button btnFeito = new Button(MainActivity.this);
-        btnFeito.setText("Feito");
-        btnFeito.setOnClickListener(v -> markEventAsDone(event.getId()));
-
-        Button btnExcluir = new Button(MainActivity.this);
-        btnExcluir.setText("Excluir");
-        btnExcluir.setOnClickListener(v -> deleteEvent(event.getId()));
-
-        eventLayout.addView(eventNameView);
-        eventLayout.addView(btnFeito);
-        eventLayout.addView(btnExcluir);
-
-        layoutEventos.addView(eventLayout);
     }
 }

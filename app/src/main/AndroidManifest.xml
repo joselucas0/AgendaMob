@@ -25,6 +25,7 @@
 
         <!-- MainActivity is no longer the launcher activity -->
         <activity android:name=".MainActivity" />
+        <activity android:name=".EventDetailsActivity"/>
 
     </application>
 

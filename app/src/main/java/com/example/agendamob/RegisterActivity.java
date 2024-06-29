@@ -62,9 +62,11 @@ public class RegisterActivity extends AppCompatActivity {
             String email = etEmail.getText().toString().trim();
             String password = etPassword.getText().toString().trim();
 
+            String hashedPassword = PasswordUtils.hashPassword(password);
+
             User newUser = new User();
             newUser.setEmail(email);
-            newUser.setPassword(password);
+            newUser.setHashedPassword(hashedPassword);
             db.userDao().insert(newUser);
 
             return null;

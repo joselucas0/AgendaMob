@@ -11,7 +11,7 @@ import java.util.List;
 @Dao
 public interface EventDao {
     @Insert
-    void insert(Event event);
+    Long insert(Event event);
 
     @Update
     void update(Event event);
@@ -20,18 +20,17 @@ public interface EventDao {
     void delete(Event event);
 
     @Query("SELECT * FROM events WHERE id = :id")
-    Event getEventById(int id);
+    Event getEventById(long id);
 
-    @Query("SELECT * FROM events WHERE date = :date AND userId = :userId")
+    @Query("SELECT * FROM events WHERE dateTime LIKE :date AND userId = :userId")
     List<Event> getEventsByDateAndUserId(String date, int userId);
 
-    @Query("UPDATE events SET done = :done WHERE id = :eventId")
+    @Query("UPDATE events SET completed = :done WHERE id = :eventId")
     void updateEventStatus(int eventId, boolean done);
 
     @Query("DELETE FROM events WHERE id = :eventId")
     void deleteEventById(int eventId);
 
     @Query("SELECT * FROM events")
-    List<Event> getAllEvents(); // Adiciona este método para buscar todos os eventos
-
+    List<Event> getAllEvents();
 }

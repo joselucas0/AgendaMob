@@ -13,8 +13,8 @@ public class User implements Serializable {
     @ColumnInfo(name = "email")
     private String email;
 
-    @ColumnInfo(name = "password")
-    private String password;
+    @ColumnInfo(name = "hashedPassword")
+    private String hashedPassword;
 
     public User() {
         // Construtor vazio necessário para Room
@@ -42,11 +42,11 @@ public class User implements Serializable {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getHashedPassword() {
+        return hashedPassword;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setHashedPassword(String hashedPassword) {
+        this.hashedPassword = hashedPassword;
     }
 }

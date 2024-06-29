@@ -28,8 +28,8 @@ public interface UserDao {
     @Query("SELECT * FROM users WHERE email = :email")
     User getUserByEmail(String email);
 
-    @Query("SELECT * FROM users WHERE email = :email AND password = :password")
-    User login(String email, String password);
+    @Query("SELECT * FROM users WHERE email = :email AND hashedPassword = :hashedPassword")
+    User login(String email, String hashedPassword);
 
     @Query("SELECT * FROM users WHERE email = :email")
     User findByEmail(String email);
